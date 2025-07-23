@@ -6,6 +6,7 @@ import JDGenerator from './JDGenerator';
 import Dashboard from './Dashboard';
 import AllJobsTable from './AllJobsTable';
 import EmployeeAuthServices from '../api/EmployeeAuthServices';
+import JobServices from '../api/JobServices';
 
 const EmpHome = () => {
   const [user, setUser] = useState(null);
@@ -108,10 +109,16 @@ const EmpHome = () => {
 
           {activeSection === 'jd' && (
             <JDGenerator
-              onJDGenerated={(data) => {
-                // When JD generated, switch to AddJob with data
-                setGeneratedJD(data);
-                setActiveSection('add');
+              onJDGenerated={async (data) => {
+                // Automatically post the job after JD generation
+                try {
+                  await JobServices.addJob(data);
+                  // Optionally show a success message here
+                } catch (err) {
+                  alert('❌ Failed to post job automatically.');
+                  console.error(err);
+                }
+                setActiveSection('allJobs'); // Switch to All Posted Jobs
               }}
             />
           )}

@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://recruitment-backend-s4la.onrender.com',
-  withCredentials: true, // important for session-based auth
+  baseURL: 'http://localhost:8080', // ✅ use http unless you have SSL
+  withCredentials: true,
 });
 
 export default axiosInstance;

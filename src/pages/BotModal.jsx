@@ -162,12 +162,12 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
   const handleCloseAndApply = async () => {
     if (!resumeSent) await handleSendResume();
     if (onFinish) onFinish(true);
-    navigate("/.");
+    navigate("/home");
   };
 
   const handleCloseOnly = () => {
     if (onFinish) onFinish(false); // not applied
-    navigate("/.", { state: { scrollToJobId: job.jobId } });
+    navigate("/home", { state: { scrollToJobId: job.jobId } });
   };
 
   return (

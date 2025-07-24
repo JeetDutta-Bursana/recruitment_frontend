@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthServices from '../api/AuthServices';
 
-import Profile from './Profile';
+import ProfilePanel from '../components/ProfilePanel';
 import MyApplications from './MyApplications';
 import JobList from './JobList';
 
@@ -29,14 +29,21 @@ const Home = () => {
 
   const handleOpenSection = (section) => {
     setActiveSection(section);
-    setTimeout(() => {
-      scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+    if (section !== 'profile') {
+      setTimeout(() => {
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const handleCloseSection = () => {
     setActiveSection(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogout = async () => {
+    await AuthServices.logout();
+    navigate('/login');
   };
 
   if (!user) return null;
@@ -74,7 +81,11 @@ const Home = () => {
         </div>
       </div>
 
-      {activeSection && (
+      {activeSection === 'profile' && (
+        <ProfilePanel user={user} onClose={handleCloseSection} onLogout={handleLogout} />
+      )}
+
+      {(activeSection === 'applications' || activeSection === 'jobcards') && (
         <div
           ref={scrollRef}
           className="relative max-w-6xl mx-auto bg-white shadow-xl rounded-2xl p-8 mt-6"
@@ -87,7 +98,6 @@ const Home = () => {
             ✕
           </button>
 
-          {activeSection === 'profile' && <Profile user={user} />}
           {activeSection === 'applications' && <MyApplications user={user} />}
           {activeSection === 'jobcards' && <JobList user={user} />}
         </div>

@@ -42,7 +42,7 @@ const JobDetail = () => {
         <p><strong>Perks:</strong></p>
         <p>{job.perks}</p>
       </div>
-      <p className="mt-4 text-blue-700 font-semibold">📩 Contact: {job.contactEmail}</p>
+      
 
       {/* ✅ Apply Button */}
       <div className="mt-6 text-center">

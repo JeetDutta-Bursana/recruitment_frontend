@@ -31,7 +31,7 @@ const Login = ({ setUser }) => {
       const res = await AuthServices.fetchCurrentUser();
       setUser(res.data);
       toast.success('Login successful!');
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       toast.error(err.response?.data || 'Login failed. Please try again.');
     } finally {

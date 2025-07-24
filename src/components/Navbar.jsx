@@ -33,7 +33,7 @@ const Navbar = ({ user, setUser, employee, setEmployee }) => {
     <>
       <header className="bg-blue-700 text-white px-6 py-3 shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold">Recruitment_E2E</Link>
+          <p className="text-xl font-bold">Recruitment_E2E</p>
 
           <nav className="space-x-6 text-sm ml-auto flex items-center">
             {!currentUser && (

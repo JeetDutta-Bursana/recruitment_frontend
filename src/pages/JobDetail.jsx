@@ -12,6 +12,11 @@ const JobDetail = () => {
       .catch(() => alert('Job not found or server error'));
   }, [jobId]);
 
+  const handleApplyClick = () => {
+    // Redirect to external application login page
+    window.location.href = 'https://1c.atract.in/login';
+  };
+
   if (!job) return <p className="text-center mt-10 text-gray-600">Loading job...</p>;
 
   return (
@@ -24,6 +29,7 @@ const JobDetail = () => {
       <p className="mb-2"><strong>Experience:</strong> {job.experience}</p>
       <p className="mb-2"><strong>Openings:</strong> {job.openings}</p>
       <p className="mb-2"><strong>Apply Between:</strong> {job.openingDate} → {job.lastDate}</p>
+
       <div className="mt-4 whitespace-pre-wrap">
         <p><strong>Description:</strong></p>
         <p>{job.description}</p>
@@ -37,6 +43,16 @@ const JobDetail = () => {
         <p>{job.perks}</p>
       </div>
       <p className="mt-4 text-blue-700 font-semibold">📩 Contact: {job.contactEmail}</p>
+
+      {/* ✅ Apply Button */}
+      <div className="mt-6 text-center">
+        <button
+          onClick={handleApplyClick}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded shadow"
+        >
+          Apply Now
+        </button>
+      </div>
     </div>
   );
 };

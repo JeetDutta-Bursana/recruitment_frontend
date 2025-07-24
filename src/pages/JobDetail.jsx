@@ -55,9 +55,7 @@ const JobDetail = () => {
         </div>
       )}
 
-      <div className="border-t border-gray-200 pt-4 mt-4">
-        <p className="text-sm text-gray-600">📩 For queries: <span className="font-medium text-blue-700">{job.contactEmail}</span></p>
-      </div>
+      
 
       {/* Apply Now Button */}
       <div className="mt-8 text-center">

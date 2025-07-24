@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'https://recruitment-backend-s4la.onrender.com',
   withCredentials: true, // important for session-based auth
 });
 

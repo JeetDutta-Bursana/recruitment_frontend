@@ -39,6 +39,9 @@ const App = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
+      <div className="w-full bg-yellow-300 text-black text-center font-bold py-1 tracking-wider text-base z-50">
+        Beta Version
+      </div>
       <Navbar
         user={user}
         setUser={setUser}

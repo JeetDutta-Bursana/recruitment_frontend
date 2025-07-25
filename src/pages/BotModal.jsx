@@ -2,8 +2,7 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import JobBotService from "../api/JobBotService"; // adjust path if needed
-
+import JobBotService from "../api/JobBotService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,15 +39,14 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
   ];
 
   useEffect(() => {
-  if (started) {
-    setLoadingQuestions(true);
-    JobBotService.generateQuestions(job.title)
-      .then((res) => setDynamicQuestions(Array.isArray(res.data.questions) ? res.data.questions : []))
-      .catch(() => setDynamicQuestions([]))
-      .finally(() => setLoadingQuestions(false));
-  }
-}, [started, job.title]);
-
+    if (started) {
+      setLoadingQuestions(true);
+      JobBotService.generateQuestions(job.title)
+        .then((res) => setDynamicQuestions(Array.isArray(res.data.questions) ? res.data.questions : []))
+        .catch(() => setDynamicQuestions([]))
+        .finally(() => setLoadingQuestions(false));
+    }
+  }, [started, job.title]);
 
   const allQuestions = [
     ...fixedQuestions.map((q) => ({ ...q, type: "text" })),
@@ -83,30 +81,29 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
     }
   };
 
- const handleSubmit = async () => {
-  setSubmitting(true);
-  const allQs = [...fixedQuestions.map(q => q.text), ...dynamicQuestions.map(q => q.question)];
-  const allAs = [
-    ...fixedQuestions.map((q) => answers[q.id] || ""),
-    ...dynamicQuestions.map((q, i) => {
-      const selected = answers[`dynamic_${i}`];
-      return typeof selected === "number" ? dynamicQuestions[i].options[selected] : "";
-    }),
-  ];
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    const allQs = [...fixedQuestions.map(q => q.text), ...dynamicQuestions.map(q => q.question)];
+    const allAs = [
+      ...fixedQuestions.map((q) => answers[q.id] || ""),
+      ...dynamicQuestions.map((q, i) => {
+        const selected = answers[`dynamic_${i}`];
+        return typeof selected === "number" ? dynamicQuestions[i].options[selected] : "";
+      }),
+    ];
 
-  try {
-    const res = await JobBotService.evaluateAnswers(allQs, allAs);
-    const data = res.data;
-    setScore(data.score);
-    setQualified(data.qualified);
-    setStep(data.qualified ? "enhancePrompt" : "results");
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setSubmitting(false);
-  }
-};
-
+    try {
+      const res = await JobBotService.evaluateAnswers(allQs, allAs);
+      const data = res.data;
+      setScore(data.score);
+      setQualified(data.qualified);
+      setStep(data.qualified ? "enhancePrompt" : "results");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const handlePayAndEnhance = () => setShowPayment(true);
 
@@ -122,42 +119,40 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
   };
 
   const enhanceResume = async () => {
-  setEnhancing(true);
-  try {
-    const res = await JobBotService.getUserResume(user.userId);
-    const resumeText = res.data.resume;
+    setEnhancing(true);
+    try {
+      const res = await JobBotService.getUserResume(user.userId);
+      const resumeText = res.data.resume;
 
-    const enhanceRes = await JobBotService.enhanceResume({
-      resume: resumeText,
-      jobTitle: job.title,
-      company: job.company,
-      jobDescription: job.description || "",
-    });
+      const enhanceRes = await JobBotService.enhanceResume({
+        resume: resumeText,
+        jobTitle: job.title,
+        company: job.company,
+        jobDescription: job.description || "",
+      });
 
-    setEnhancedCv(enhanceRes.data.enhancedCv);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setEnhancing(false);
-  }
-};
-
+      setEnhancedCv(enhanceRes.data.enhancedCv);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setEnhancing(false);
+    }
+  };
 
   const handleSendResume = async () => {
-  try {
-    await JobBotService.applyToJob({
-      userId: user.userId,
-      jobId: job.jobId,
-      answers,
-      score,
-      qualified: true,
-    });
-    setResumeSent(true);
-  } catch (err) {
-    console.error("Failed to apply:", err);
-  }
-};
-
+    try {
+      await JobBotService.applyToJob({
+        userId: user.userId,
+        jobId: job.jobId,
+        answers,
+        score,
+        qualified: true,
+      });
+      setResumeSent(true);
+    } catch (err) {
+      console.error("Failed to apply:", err);
+    }
+  };
 
   const handleCloseAndApply = async () => {
     if (!resumeSent) await handleSendResume();
@@ -166,7 +161,7 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
   };
 
   const handleCloseOnly = () => {
-    if (onFinish) onFinish(false); // not applied
+    if (onFinish) onFinish(false);
     navigate("/home", { state: { scrollToJobId: job.jobId } });
   };
 
@@ -263,6 +258,7 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
                 <button
                   onClick={async () => {
                     await handleSendResume();
+                    setResumeSent(true);
                     setStep("results");
                   }}
                   className="bg-gray-600 text-white px-4 py-2 rounded"
@@ -306,25 +302,19 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
                         type="text"
                         placeholder="Card Number"
                         className="border p-2 rounded w-full mb-3"
-                        onChange={(e) =>
-                          setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })
-                        }
+                        onChange={(e) => setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })}
                       />
                       <input
                         type="text"
                         placeholder="Expiry MM/YY"
                         className="border p-2 rounded w-full mb-3"
-                        onChange={(e) =>
-                          setPaymentDetails({ ...paymentDetails, expiry: e.target.value })
-                        }
+                        onChange={(e) => setPaymentDetails({ ...paymentDetails, expiry: e.target.value })}
                       />
                       <input
                         type="text"
                         placeholder="CVV"
                         className="border p-2 rounded w-full mb-3"
-                        onChange={(e) =>
-                          setPaymentDetails({ ...paymentDetails, cvv: e.target.value })
-                        }
+                        onChange={(e) => setPaymentDetails({ ...paymentDetails, cvv: e.target.value })}
                       />
                     </>
                   )}

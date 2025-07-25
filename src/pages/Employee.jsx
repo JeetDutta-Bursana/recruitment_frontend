@@ -30,19 +30,19 @@ const Employee = ({ employee, setEmployee }) => {
       
       <Route
         path="home"
-        element={employee ? <EmpHome /> : <Navigate to="/employee/employee-login" />}
+        element={employee ? <EmpHome /> : <Navigate to="/employee/home" />}
       />
       <Route
         path="add-job"
-        element={employee ? <AddJob /> : <Navigate to="/employee/employee-login" />}
+        element={employee ? <AddJob /> : <Navigate to="/employee/add-job" />}
       />
       <Route
         path="jd-generator"
-        element={employee ? <JDGenerator /> : <Navigate to="/employee/employee-login" />}
+        element={employee ? <JDGenerator /> : <Navigate to="/employee/gd-generator" />}
       />
       <Route
         path="dashboard"
-        element={employee ? <Dashboard /> : <Navigate to="/employee/employee-login" />}
+        element={employee ? <Dashboard /> : <Navigate to="/employee/dashboard" />}
       />
     </Routes>
   );

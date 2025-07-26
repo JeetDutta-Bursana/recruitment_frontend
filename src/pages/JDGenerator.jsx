@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-
 import JobBotService from "../api/JobBotService";
+import { useNavigate } from "react-router-dom";
 
 const qualificationOptions = [
   "High School",
@@ -23,7 +23,8 @@ const predefinedLocations = [
   "Ahmedabad",
 ];
 
-const JDGenerator = ({ onJDGenerated }) => {
+const JDGenerator = () => {
+  const navigate = useNavigate();
   const [jobTitle, setJobTitle] = useState("");
   const [company, setCompany] = useState("");
   const [mode, setMode] = useState("");
@@ -44,65 +45,32 @@ const JDGenerator = ({ onJDGenerated }) => {
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (
-    !jobTitle.trim() ||
-    !company.trim() ||
-    !mode ||
-    !department.trim() ||
-    !experience.trim() ||
-    !location ||
-    !highestQualification ||
-    !minSalaryLakh ||
-    !maxSalaryLakh ||
-    !openings ||
-    !openingDate ||
-    !closingDate ||
-    !contactEmail.trim()
-  ) {
-    alert("⚠️ Please fill in all required fields.");
-    return;
-  }
+    if (
+      !jobTitle.trim() ||
+      !company.trim() ||
+      !mode ||
+      !department.trim() ||
+      !experience.trim() ||
+      !location ||
+      !highestQualification ||
+      !minSalaryLakh ||
+      !maxSalaryLakh ||
+      !openings ||
+      !openingDate ||
+      !closingDate ||
+      !contactEmail.trim()
+    ) {
+      alert("⚠️ Please fill in all required fields.");
+      return;
+    }
 
-  setLoading(true);
-  setGeneratedJD({});
+    setLoading(true);
+    setGeneratedJD({});
 
-  try {
-    const response = await JobBotService.generateJD({
-      title: jobTitle,
-      company,
-      mode,
-      department,
-      experience,
-      location,
-      highestQualification,
-      minSalaryLakh,
-      minSalaryThousand,
-      maxSalaryLakh,
-      maxSalaryThousand,
-      openings,
-      openingDate,
-      closingDate,
-      contactEmail,
-    });
-
-    const jdObject =
-      typeof response.data === "string" ? JSON.parse(response.data) : response.data;
-    setGeneratedJD(jdObject);
-  } catch (err) {
-    console.error("❌ Error generating JD:", err);
-    alert("Failed to generate JD. Check console.");
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-  const handleUseJD = () => {
-    if (onJDGenerated && generatedJD) {
-      onJDGenerated({
-        ...generatedJD,
+    try {
+      const response = await JobBotService.generateJD({
         title: jobTitle,
         company,
         mode,
@@ -118,6 +86,40 @@ const JDGenerator = ({ onJDGenerated }) => {
         openingDate,
         closingDate,
         contactEmail,
+      });
+
+      const jdObject =
+        typeof response.data === "string" ? JSON.parse(response.data) : response.data;
+      setGeneratedJD(jdObject);
+    } catch (err) {
+      console.error("❌ Error generating JD:", err);
+      alert("Failed to generate JD. Check console.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUseJD = () => {
+    if (generatedJD) {
+      navigate("/add-job", {
+        state: {
+          ...generatedJD,
+          title: jobTitle,
+          company,
+          mode,
+          department,
+          experience,
+          location,
+          highestQualification,
+          minSalaryLakh,
+          minSalaryThousand,
+          maxSalaryLakh,
+          maxSalaryThousand,
+          openings,
+          openingDate,
+          closingDate,
+          contactEmail,
+        },
       });
     }
   };

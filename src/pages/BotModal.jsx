@@ -256,15 +256,17 @@ const BotModal = ({ job, user, onClose, onFinish }) => {
                   Yes, Enhance
                 </button>
                 <button
-                  onClick={async () => {
-                    await handleSendResume();
-                    setResumeSent(true);
-                    setStep("results");
-                  }}
-                  className="bg-gray-600 text-white px-4 py-2 rounded"
-                >
-                  No, Skip
-                </button>
+                onClick={async () => {
+                  await handleSendResume();
+                  setResumeSent(true);
+                  if (onFinish) onFinish(true);
+                  navigate("/home");
+                }}
+                className="bg-gray-600 text-white px-4 py-2 rounded"
+              >
+                No, Skip
+              </button>
+
               </div>
             </>
           )}

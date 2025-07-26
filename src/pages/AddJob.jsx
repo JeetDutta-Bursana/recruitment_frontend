@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import JobServices from "../api/JobServices";
 import EmployeeAuthServices from "../api/EmployeeAuthServices";
-
+import { useLocation } from "react-router-dom";
 
 const predefinedLocations = [
   "Bangalore", "Hyderabad", "Mumbai", "Delhi", "Pune",
@@ -16,7 +16,10 @@ const qualificationOptions = [
   "Master's Degree", "Doctorate / PhD", "Other"
 ];
 
-const AddJob = ({ onJobAdded, initialData }) => {
+const AddJob = ({ onJobAdded }) => {
+  const location = useLocation();
+  const initialData = location.state || null;
+
   const {
     register,
     handleSubmit,
@@ -34,15 +37,12 @@ const AddJob = ({ onJobAdded, initialData }) => {
   const watchLocation = watch("location", "");
   const watchQualification = watch("highestQualification", "");
 
-  // Fetch logged-in employer
   useEffect(() => {
-   EmployeeAuthServices.fetchCurrentEmployee()
-  .then((res) => setUser(res.data))
-  .catch(() => setUser(null));
-
+    EmployeeAuthServices.fetchCurrentEmployee()
+      .then((res) => setUser(res.data))
+      .catch(() => setUser(null));
   }, []);
 
-  // Auto-fill form if editing
   useEffect(() => {
     if (initialData) {
       reset(initialData);
@@ -124,7 +124,8 @@ const AddJob = ({ onJobAdded, initialData }) => {
     >
       <h2 className="text-2xl font-bold text-blue-700 mb-4">📝 Add New Job</h2>
 
-      {/* Title */}
+      {/* ...form fields remain unchanged... */}
+        {/* Title */}
       <input
         type="text"
         placeholder="Job Title"

@@ -303,7 +303,7 @@ const AddJob = ({ onJobAdded }) => {
         type="email"
         placeholder="Hiring Manager Email"
         {...register("contactEmail", {
-          required: "Email is required",
+          
           pattern: {
             value: /^\S+@\S+$/i,
             message: "Invalid email format",

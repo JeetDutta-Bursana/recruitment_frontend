@@ -308,7 +308,7 @@ const JDGenerator = () => {
           value={contactEmail}
           onChange={(e) => setContactEmail(e.target.value)}
           className="w-full px-4 py-2 border rounded"
-          required
+          
         />
 
         <button
